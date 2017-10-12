@@ -1,0 +1,23 @@
+{
+  "name": "ticTacToeBot-client",
+  "version": "0.0.1",
+  "homepage": "https://github.com/kilatib/ticTacToeBot",
+  "authors": [
+    "Vitalik Shtykhno <kilatib@gmail.com>"
+  ],
+  "description": "ticTacToeBot",
+  "keywords": [
+    "ticTacToeBot"
+  ],
+  "license": "private",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ],
+  "dependencies": {
+    "angular": "^1.6",
+    "angular-resource": "~1.6.6"
+  },
+  "devDependencies": {}
+}

@@ -1,0 +1,36 @@
+version: '3.3'
+volumes:
+    phpsocket: {}
+    phplog: {}
+services:
+    api:
+        image: whatwedo/symfony3
+        container_name: ticTacToeBot-api
+        environment:
+            CONTAINER_TIMEZONE: ${CONTAINER_TIMEZONE}
+        ports:
+            - "9090:80"
+    client:
+        image: nginx:latest
+        container_name: ticTacToeBot-client
+        depends_on:
+            - api
+        environment:
+            - NGINX_PORT=80
+        volumes:
+            - ${CLIENT_PATH}:/usr/share/nginx/html
+        ports:
+            - "8080:80"
+    client-tools:
+        image: mkenney/npm:latest
+        command: /bin/sh build.sh
+        container_name: ticTacToeBot-clientTools
+        depends_on:
+            - client
+        environment:
+            - PUID=1
+            - PGID=1
+        volumes:
+            - ${CLIENT_PATH}:/src:rw
+
+

@@ -1,0 +1,26 @@
+<link rel="stylesheet" ng-href="{{ $ctrl.stylePath }}">
+<div class="board">
+    <div class="board-field"
+         ng-repeat="field in $ctrl.board"
+         ng-click="$ctrl.move(field)"
+         ng-class="{
+            'board-field_noTopBorder': field.x === 0,
+            'board-field_noBottomBorder': field.x === ($ctrl.size -1),
+            'board-field_noLeftBorder': field.y === 0,
+            'board-field_noRightBorder': field.y === ($ctrl.size -1)
+         }"
+         ng-style = "{
+            'height': 'calc(100% / {{ $ctrl.size }})',
+            'flex'  : '1 1 calc(100% / {{ $ctrl.size }})',
+            'font-size'  : 'calc(100% / {{ $ctrl.size }} * 50)',
+         }"
+    >{{ field.value }}</div>
+
+    <div ng-if="$ctrl.fetchErrorList">
+        <div ng-repeat="error in $ctrl.fetchErrorList">{{ error.detail }}</div>
+    </div>
+
+    <div class="board-control">
+        <span ng-click="$ctrl.reset()">Reset</span>
+    </div>
+</div>

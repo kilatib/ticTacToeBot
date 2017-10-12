@@ -1,0 +1,19 @@
+{
+    "name": "ticTacToeBot-client",
+    "description": "ticTacToeBot",
+    "license": "UNLICENSED",
+    "private": false,
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:kilatib/ticTacToeBot.git"
+    },
+    "version": "0.0.1",
+    "dependencies": {
+        "gulp": "~3.9.0",
+        "gulp-concat": "^2.6.0",
+        "gulp-uglify": "~2.0.0",
+        "gulp-ng-annotate": "^1.1.0",
+        "yargs": "^6.5.0"
+    },
+    "devDependencies": {}
+}

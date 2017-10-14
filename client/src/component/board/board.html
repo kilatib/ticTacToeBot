@@ -1,4 +1,5 @@
-<link rel="stylesheet" ng-href="{{ $ctrl.stylePath }}">
+<link rel="stylesheet" ng-href="{{ $ctrl.stylePath }}/board.css">
+<link rel="stylesheet" ng-href="{{ $ctrl.stylePath }}/loader.css">
 <div class="board">
     <div class="board-field"
          ng-repeat="field in $ctrl.board"
@@ -11,16 +12,24 @@
          }"
          ng-style = "{
             'height': 'calc(100% / {{ $ctrl.size }})',
-            'flex'  : '1 1 calc(100% / {{ $ctrl.size }})',
-            'font-size'  : 'calc(100% / {{ $ctrl.size }} * 50)',
+            'flex'  : '1 1 calc(100% / {{ $ctrl.size }})'
          }"
     >{{ field.value }}</div>
 
-    <div ng-if="$ctrl.fetchErrorList.length" class="board-errorList">
-        <div ng-repeat="error in $ctrl.fetchErrorList">{{ error.detail }}</div>
+    <div class="board-screenLock" ng-if="$ctrl.screenLock">
+        <div class="cssload-thecube">
+            <div class="cssload-cube cssload-c1"></div>
+            <div class="cssload-cube cssload-c2"></div>
+            <div class="cssload-cube cssload-c4"></div>
+            <div class="cssload-cube cssload-c3"></div>
+        </div>
     </div>
+</div>
 
-    <div class="board-control">
-        <span ng-click="$ctrl.reset()">Reset</span>
-    </div>
+<div ng-if="$ctrl.fetchErrorList.length" class="board-errorList">
+    <div ng-repeat="error in $ctrl.fetchErrorList">{{ error.detail }}</div>
+</div>
+
+<div class="board-control">
+    <span ng-click="$ctrl.reset()">Reset</span>
 </div>

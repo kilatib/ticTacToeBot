@@ -15,10 +15,11 @@
                     var $ctrl = this;
 
                     $ctrl.symbols = ['X', 'O'];
+                    $ctrl.screenLock = false;
 
                     $ctrl.$onInit = function() {
                         $ctrl.board = [];
-                        $ctrl.stylePath = AppSettings.getTemplateDir() + '/board/board.css';
+                        $ctrl.stylePath = AppSettings.getTemplateDir() + '/board';
 
                         for(var i = 0; i < $ctrl.size; i++ ) {
                             for(var j = 0; j < $ctrl.size; j++) {
@@ -32,7 +33,8 @@
                     };
 
                     $ctrl.move = function (field) {
-                        if ('' === field.value ) {
+                        if ('' === field.value && !$ctrl.screenLock) {
+                            $ctrl.screenLock = true;
                             field.value = $ctrl.symbols.reverse()[0];
 
                             boardService
@@ -42,6 +44,7 @@
                                 })
                                 .$promise
                                 .then(function(nextField){
+                                    $ctrl.screenLock = false;
                                     $ctrl.board.forEach(function(field) {
                                         if (
                                             field.x === nextField.x

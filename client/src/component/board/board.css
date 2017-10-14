@@ -6,13 +6,42 @@ html, body, * {
     padding: 0;
 }
 
-board {
-    width:  100vw;
-    height: 100vh;
 
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+board {
     display: flex;
     flex-flow: column nowrap;
+
+    position: relative;
 }
+
+@media screen and (max-aspect-ratio:4/3) {
+    board {
+        width:  80vh;
+        height: 80vh;
+    }
+
+    .board-field {
+        font-size: 30vh;
+    }
+}
+
+@media screen and (min-aspect-ratio:4/3) {
+    board {
+        width:  80vw;
+        height: 80vw;
+    }
+
+    .board-field {
+        font-size: 30vw;
+    }
+}
+
+
 
 .board {
     display: flex;
@@ -25,16 +54,10 @@ board {
 
 .board-field {
     display: flex;
-    flex: 1 1 32%;
     justify-content: center;
     align-items: center;
-    height: 32%;
-
     border: 1px solid #005480;
-    font-size: 30vw;
-
-    min-height: 80px;
-    min-width:  80px;
+    overflow: hidden;
 }
 
 .board-field.board-field_noTopBorder {
@@ -84,4 +107,16 @@ board {
 
     width: auto;
     height: auto;
+}
+
+.board-screenLock {
+    position: absolute;
+    background-color: #2e3436;
+    opacity: 0.5;
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

@@ -60,6 +60,11 @@ board {
 
     background-color: #fd4c5a;
     color: white;
+
+    width: auto;
+    height: auto;
+
+    padding: 1vh 2vw;
 }
 
 .board-control {

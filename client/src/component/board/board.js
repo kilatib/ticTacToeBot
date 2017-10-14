@@ -36,28 +36,23 @@
                             field.value = $ctrl.symbols.reverse()[0];
 
                             boardService
-                                .field
-                                .move({
-                                        'symbol': field.value
-                                     },
-                                    $ctrl.board
-                                )
-                                .$promise
-                                .then(function(){
-                                    var newFiled =  boardService
-                                        .field
-                                        .calculate();
-                                    newFiled
-                                        .$promise
-                                        .then(function(){
-
-                                        })
-                                        .catch(function(errorList){
-                                            $ctrl.fetchErrorList = errorList;
-                                        });
+                                .board
+                                .makeMove({
+                                    'board': $ctrl.board
                                 })
-                                .catch(function(errorList) {
-                                    $ctrl.fetchErrorList = errorList;
+                                .$promise
+                                .then(function(nextField){
+                                    $ctrl.board.forEach(function(field) {
+                                        if (
+                                            field.x === nextField.x
+                                            && field.y === nextField.y
+                                        ) {
+                                            field.value = nextField.value;
+                                        }
+                                    });
+                                })
+                                .catch(function(response) {
+                                    $ctrl.fetchErrorList = response.data;
                                 });
                         }
                     };
@@ -66,6 +61,7 @@
                         $ctrl.board.forEach(function (field) {
                             field.value = '';
                         });
+                        $ctrl.fetchErrorList = [];
                     };
                 }
             ]

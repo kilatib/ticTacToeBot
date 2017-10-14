@@ -4,14 +4,9 @@
     angular.module('ticTacToeClient').service('boardService', [
         '$resource',
         function($resource) {
-            this.field = $resource('move/:symbol', {
-                symbol: '@symbol'
-            }, {
-                move: {
-                    method: 'PUT'
-                },
-                calculate: {
-                    method: 'GET'
+            this.board = $resource('make-move', {}, {
+                makeMove: {
+                    method: 'POST'
                 }
             });
             return this.event;

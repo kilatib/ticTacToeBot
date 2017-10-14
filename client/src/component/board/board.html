@@ -16,7 +16,7 @@
          }"
     >{{ field.value }}</div>
 
-    <div ng-if="$ctrl.fetchErrorList">
+    <div ng-if="$ctrl.fetchErrorList.length" class="board-errorList">
         <div ng-repeat="error in $ctrl.fetchErrorList">{{ error.detail }}</div>
     </div>
 

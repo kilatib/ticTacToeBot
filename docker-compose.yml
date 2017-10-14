@@ -1,4 +1,4 @@
-version: '3.3'
+version: '2.1'
 volumes:
     phpsocket: {}
     phplog: {}
@@ -6,8 +6,12 @@ services:
     api:
         image: whatwedo/symfony3
         container_name: ticTacToeBot-api
+#        command: /bin/sh /var/www/bin/init.sh
         environment:
             CONTAINER_TIMEZONE: ${CONTAINER_TIMEZONE}
+            COMPOSER_ALLOW_SUPERUSER: 1 # Allow Composer to be run as root
+        volumes:
+            - ${API_PATH}:/var/www:rw
         ports:
             - "9090:80"
     client:
@@ -23,8 +27,8 @@ services:
             - "8080:80"
     client-tools:
         image: mkenney/npm:latest
-        command: /bin/sh build.sh
         container_name: ticTacToeBot-clientTools
+        command: /bin/sh build.sh
         depends_on:
             - client
         environment:

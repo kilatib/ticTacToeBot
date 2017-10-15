@@ -50,14 +50,13 @@ class BoardController extends FOSRestController implements ClassResourceInterfac
     public function postMakeMoveAction(Request $request)
     {
         $view = $this->view();
-
         try {
             $content = $request->getContent();
             if (empty($content)) {
                 throw new AppBundleException(AppBundleException::NO_CONTENT);
             }
 
-            $data = json_decode($content, true);
+            $data = json_decode($request->getContent(), true);
 
             $form = $this
                 ->createForm( BoardForm::class, new RequestBoard(), [ 'method' => Request::METHOD_POST ])

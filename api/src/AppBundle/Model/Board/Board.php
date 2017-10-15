@@ -66,6 +66,19 @@ class Board implements BoardInterface {
         ;
     }
 
+    public function isStepSequenceBroken(): bool
+    {
+        $flag = false;
+        if (!empty($this->unitAmountList)) {
+            $minAmount = min(array_values($this->unitAmountList));
+            $maxAmount = max(array_values($this->unitAmountList));
+
+            $flag = ($maxAmount - $minAmount) > 1;
+        }
+
+        return $flag;
+    }
+
     public function nextUnit(): string
     {
         $symbol = FieldInterface::PRIMARY_PLAYER_SYMBOL;
@@ -94,6 +107,9 @@ class Board implements BoardInterface {
             throw new BoardException(BoardException::GAME_OVER);
         }
 
+        if ($this->isStepSequenceBroken()) {
+            throw new BoardException(BoardException::GAME_OVER);
+        }
 
     }
 }

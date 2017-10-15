@@ -128,6 +128,9 @@ abstract class AbstractControllerTest extends WebTestCase
         return $errorResponse;
     }
 
+    /**
+     * @return \Symfony\Bundle\FrameworkBundle\Client
+     */
     protected function getClient()
     {
         $client = self::createClient();
@@ -135,8 +138,26 @@ abstract class AbstractControllerTest extends WebTestCase
         return $client;
     }
 
+    /**
+     * @return string
+     */
     protected function getMoveUrl()
     {
         return $this->getClient()->getContainer()->get('router')->generate('make_move');
+    }
+
+    protected function apiRequest($method, $uri, $data)
+    {
+        $client = $this->getClient();
+        $client->request(
+            $method,
+            $uri,
+            [],
+            [],
+            ['CONTENT_TYPE' => 'application/json'],
+            json_encode($data)
+        );
+
+        return $client;
     }
 }

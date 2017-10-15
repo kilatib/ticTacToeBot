@@ -8,6 +8,11 @@ use AppBundle\Model\Board\{
 
 use AppBundle\AppBundleException;
 
+use Symfony\Component\HttpFoundation\{
+    Request,
+    Response
+};
+
 class BoardControllerTest extends AbstractControllerTest
 {
     /**
@@ -18,8 +23,8 @@ class BoardControllerTest extends AbstractControllerTest
         $client    = $this->getClient();
         $symbolUrl = $client->getContainer()->get('router')->generate('symbols');
 
-        $client->request('GET', $symbolUrl);
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $client->request(Request::METHOD_GET, $symbolUrl);
+        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
 
         $content = json_decode($client->getResponse()->getContent());
 
@@ -33,20 +38,14 @@ class BoardControllerTest extends AbstractControllerTest
 
     /**
      *
-     *
-     * X X X
-     * X X X
-     * X X X
+     * '' '' ''
+     * '' '' ''
+     * '' '' ''
      */
     public function testPostMakeMoveAction()
     {
-        $client = $this->getClient();
-        $boardSymfonyRequest = $this->generateEmptyRequestBoard();
-
-        $client->request('POST', $this->getMoveUrl(), ['test' => '']);
-
-        print_r($client->getResponse()->getContent());
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $client = $this->apiRequest(Request::METHOD_POST, $this->getMoveUrl(), $this->generateEmptyRequestBoard());
+        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
 
         //
         // test correct response
@@ -64,8 +63,9 @@ class BoardControllerTest extends AbstractControllerTest
     public function testEmptySymfonyRequest()
     {
         $client = $this->getClient();
-        $client->request('POST', $this->getMoveUrl());
-        $this->assertEquals(400, $client->getResponse()->getStatusCode());
+        $client->request(Request::METHOD_POST, $this->getMoveUrl());
+
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $client->getResponse()->getStatusCode());
 
         $error = $this->assertAndParseApiErrorResponse($client);
         $this->assertContains(AppBundleException::NO_CONTENT, $error->detail);

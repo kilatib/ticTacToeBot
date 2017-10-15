@@ -2,6 +2,11 @@
 
 namespace AppBundle\Tests\Controller\Board;
 
+use Symfony\Component\HttpFoundation\{
+    Request,
+    Response
+};
+
 use AppBundle\Model\Board\{
     FieldInterface,
     BoardException
@@ -23,10 +28,8 @@ class NextMoveCalculationTest extends AbstractControllerTest
      */
     public function tesNextMoveAction()
     {
-        $client = $this->getClient();
         $boardRequest = $this->generateEmptyRequestBoard();
-
-        $client->request('GET', $this->getMoveUrl(), $boardRequest);
+        $client = $this->apiRequest(Request::METHOD_POST, $this->getMoveUrl(), $boardRequest);
 
         //
         // test correct response
@@ -43,6 +46,8 @@ class NextMoveCalculationTest extends AbstractControllerTest
         // make one more request
         // but add first symbol AI should take another
         $boardRequest[1]->value = FieldInterface::PRIMARY_PLAYER_SYMBOL;
+        $client = $this->apiRequest(Request::METHOD_POST, $this->getMoveUrl(), $boardRequest);
+
         $respondField = json_decode($client->getResponse()->getContent());
         $this->assertObjectHasAttribute('x',     $respondField);
         $this->assertObjectHasAttribute('y',     $respondField);
@@ -54,19 +59,17 @@ class NextMoveCalculationTest extends AbstractControllerTest
 
     /**
      *
-     *
      * X X X
      * X X X
      * X X X
      */
     public function testFullBoard()
     {
-        $client      = $this->getClient();
         $randomBoard = $this->generateRandomBoard(false);
 
-        $client->request('POST', $this->getMoveUrl(), $randomBoard);
+        $client = $this->apiRequest(Request::METHOD_POST, $this->getMoveUrl(), $randomBoard);
+        $error  = $this->assertAndParseApiErrorResponse($client);
 
-        $error = $this->assertAndParseApiErrorResponse($client);
         $this->assertContains(BoardException::GAME_OVER, $error->detail);
     }
 
@@ -79,14 +82,34 @@ class NextMoveCalculationTest extends AbstractControllerTest
      */
     public function testMixedBorderSize()
     {
-        $client       = $this->getClient();
         $boardRequest = $this->generateRequestBoard(FieldInterface::PRIMARY_PLAYER_SYMBOL);
 
         unset($boardRequest['board'][2]);
 
-        $client->request('POST', $this->getMoveUrl(), $boardRequest);
+        $client = $this->apiRequest(Request::METHOD_POST, $this->getMoveUrl(), $boardRequest);
 
         $error = $this->assertAndParseApiErrorResponse($client);
         $this->assertContains(BoardException::BOARD_SIZE, $error->detail);
+    }
+
+    /**
+     * Create Board 3 x 3 and send it
+     *
+     * X X
+     * X X X
+     * X X X
+     */
+    public function testStepSequence()
+    {
+        $boardRequest = $this->generateEmptyRequestBoard();
+
+        $boardRequest[1]->value = FieldInterface::PRIMARY_PLAYER_SYMBOL;
+        $boardRequest[2]->value = FieldInterface::PRIMARY_PLAYER_SYMBOL;
+        $boardRequest[3]->value = FieldInterface::PRIMARY_PLAYER_SYMBOL;
+
+        $client = $this->apiRequest(Request::METHOD_POST, $this->getMoveUrl(), $boardRequest);
+
+        $error = $this->assertAndParseApiErrorResponse($client);
+        $this->assertContains(BoardException::STEP_SEQUENCE, $error->detail);
     }
 }

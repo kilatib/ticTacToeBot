@@ -9,6 +9,13 @@
                     method: 'POST'
                 }
             });
+
+            this.symbols = $resource('symbols', {}, {
+                query: {
+                    method: 'GET',
+                    isArray: true
+                }
+            });
             return this.event;
         }
     ]);

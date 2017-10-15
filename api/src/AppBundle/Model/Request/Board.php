@@ -4,8 +4,7 @@ namespace AppBundle\Model\Request;
 
 use AppBundle\Model\Board\{
     BoardInterface,
-    Board  as BoardModel,
-    Field  as FieldModel
+    Board  as BoardModel
 };
 
 class Board
@@ -13,7 +12,7 @@ class Board
     /** @var BoardModel */
     private $board;
 
-    public function board($collection)
+    public function setBoard($collection)
     {
         $this->board = new BoardModel();
         foreach ($collection as $fieldModel) {

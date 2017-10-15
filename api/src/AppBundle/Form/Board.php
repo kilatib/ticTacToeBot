@@ -19,9 +19,8 @@ class Board extends AbstractType
     {
         $builder->add('board', CollectionType::class, [
             'allow_add' => true,
-            'allow_delete' => true,
-            'by_reference' => false,
-            'entry_type' => BoardField::class
+            'entry_type' => BoardField::class,
+            'required' => true,
         ]);
     }
 
@@ -29,7 +28,7 @@ class Board extends AbstractType
     {
         $resolver->setDefaults([
             'csrf_protection' => false,
-            'cascade_validation' => true,
+            'cascade_validation' => false,
         ]);
     }
 

@@ -14,7 +14,10 @@
             'height': 'calc(100% / {{ $ctrl.size }})',
             'flex'  : '1 1 calc(100% / {{ $ctrl.size }})'
          }"
-    >{{ field.value }}</div>
+    >
+        <div class="board-field-cellNumber">{{field.x }}, {{ field.y}}</div>
+        {{ field.value }}
+    </div>
 
     <div class="board-screenLock" ng-if="$ctrl.screenLock">
         <div class="cssload-thecube">

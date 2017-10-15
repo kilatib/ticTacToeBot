@@ -5,3 +5,8 @@ client/node_modules
 api/vendor/*
 api/var/cache/*
 api/var/sessions/*
+
+# nginx logs
+api/var/logs/nginx
+
+.DS_Store

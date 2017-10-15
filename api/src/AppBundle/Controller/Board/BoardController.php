@@ -2,26 +2,23 @@
 
 namespace AppBundle\Controller\Board;
 
-use PHPUnit\Runner\Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Symfony\Component\HttpFoundation\{
     Request,
     Response
 };
 
-use FOS\RestBundle\Controller\Annotations;
 use FOS\RestBundle\ {
     Controller\FOSRestController,
     Routing\ClassResourceInterface
 };
-use JMS\Serializer\SerializationContext;
 
 use AppBundle\Model\Board\ {
     Board,
     BoardException,
-    Field
+    Field,
+    FieldInterface
 };
 
 use AppBundle\Model\Request\Board as RequestBoard;
@@ -47,15 +44,21 @@ class BoardController extends FOSRestController implements ClassResourceInterfac
      *          value: 'X'
      *      }
      *
-     *  @Route("/api/board/make-move", name="make_move")
+     * @Route("/api/board/make-move", name="make_move")
+     *
      */
-    public function postAction(Request $request)
+    public function postMakeMoveAction(Request $request)
     {
         $view = $this->view();
 
-        $data = json_decode($request->getContent(), true);
-
         try {
+            $content = $request->getContent();
+            if (empty($content)) {
+                throw new AppBundleException(AppBundleException::NO_CONTENT);
+            }
+
+            $data = json_decode($content, true);
+
             $form = $this
                 ->createForm( BoardForm::class, new RequestBoard(), [ 'method' => Request::METHOD_POST ])
                 ->submit($data);
@@ -67,7 +70,8 @@ class BoardController extends FOSRestController implements ClassResourceInterfac
             /** @var Board $boardModel */
             $boardModel = $form->getData()->getBoard();
 
-            error_log(print_r($boardModel, true));
+            /** if board invalid will be thrown one of the exceptions **/
+            $boardModel->validate();
 
             /** @var StrategyFactory $factory */
             $factory = $this->get('factory.tactactoe');
@@ -92,6 +96,27 @@ class BoardController extends FOSRestController implements ClassResourceInterfac
             ]);
         }
 
-        return $this->handleView($view);
+        return $result = $this->handleView($view);
+    }
+
+    /**
+     * Returns next step
+     *
+     * **Response Format**
+     *      [ 'X', 'O' ]
+     *
+     *  @Route("/api/board/symbols", name="symbols")
+     */
+    public function getSymbolsAction()
+    {
+        $view = $this->view();
+        $view->setData(
+            [
+                FieldInterface::PRIMARY_PLAYER_SYMBOL,
+                FieldInterface::SECONDARY_PLAYER_SYMBOL
+            ]
+        );
+
+        return $view;
     }
 }

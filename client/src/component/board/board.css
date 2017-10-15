@@ -58,6 +58,8 @@ board {
     align-items: center;
     border: 1px solid #005480;
     overflow: hidden;
+
+    position: relative;
 }
 
 .board-field.board-field_noTopBorder {
@@ -74,6 +76,14 @@ board {
 
 .board-field.board-field_noRightBorder {
     border-right-style: none;
+}
+.board-field-cellNumber {
+    position: absolute;
+    left: 1vh;
+    top: 1vw;
+    font-size: .8rem;
+    color: #005480;
+    opacity: 0.3;
 }
 
 .board-errorList {

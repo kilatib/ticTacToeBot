@@ -2,6 +2,8 @@
 
 namespace AppBundle\Model\Board;
 
+use PHPUnit\Runner\Exception;
+
 class Board implements BoardInterface {
     /**
      * @Serializer\Type("Field[]")
@@ -9,20 +11,13 @@ class Board implements BoardInterface {
      *
      * @var FieldInterface[]
      */
-    protected $fieldList = [];
-
-    private $maxY = -1;
-    private $maxX = -1;
-
+    protected $fieldList    = [];
     private $unitAmountList = [];
 
     public function setField(FieldInterface $field) : array
     {
         if ($field->isValid()) {
             $this->fieldList[] = $field;
-
-            $this->maxY = ($field->getY() < $this->maxY ) ?? $field->getY();
-            $this->maxX = ($field->getX() < $this->maxX ) ?? $field->getX();
 
             if (!$field->isEmpty()) {
                 if (isset($this->unitAmountList[$field->getValue()])) {
@@ -50,14 +45,55 @@ class Board implements BoardInterface {
         return $result;
     }
 
-    public function isValid(): bool
+    /**
+     * If board full then game was finished
+     *
+     * @return bool
+     */
+    public function isFull () : bool
     {
-        return $this->maxX === $this->maxY;
+        $totalSymbolsAmount = array_sum($this->unitAmountList);
+        return $totalSymbolsAmount >= count($this->fieldList);
+    }
+
+    public function isBoardSquare(): bool
+    {
+        $fieldAmount = count($this->fieldList);
+        $sqrt = sqrt($fieldAmount);
+
+        return $fieldAmount  > 0           // matrix contain data
+               && $sqrt === floor($sqrt)   // matrix square
+        ;
     }
 
     public function nextUnit(): string
     {
-        $minAmount = min($this->unitAmountList);
-        return (string)array_reverse($this->unitAmountList)[$minAmount];
+        $symbol = FieldInterface::PRIMARY_PLAYER_SYMBOL;
+        if (!empty($this->unitAmountList)) {
+            if (count($this->unitAmountList) > 1) {
+                $minAmount = min(array_values($this->unitAmountList));
+                $symbol    = (string)array_flip($this->unitAmountList)[$minAmount];
+            } else {
+                $symbol = isset($this->unitAmountList[FieldInterface::PRIMARY_PLAYER_SYMBOL])
+                    ? FieldInterface::SECONDARY_PLAYER_SYMBOL
+                    : FieldInterface::PRIMARY_PLAYER_SYMBOL;
+            }
+        }
+
+        return $symbol;
+    }
+
+    public function validate()
+    {
+        // check board size
+        if (false === $this->isBoardSquare()) {
+            throw new BoardException(BoardException::BOARD_SIZE);
+        }
+
+        if ($this->isFull()) {
+            throw new BoardException(BoardException::GAME_OVER);
+        }
+
+
     }
 }

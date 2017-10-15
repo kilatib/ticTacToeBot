@@ -7,11 +7,12 @@ use Symfony\Component\{
     Form\FormBuilderInterface,
     Validator\Constraints\NotBlank,
     OptionsResolver\OptionsResolver,
-    Form\Extension\Core\Type\NumberType,
-    Form\Extension\Core\Type\TextType
+    Form\Extension\Core\Type\IntegerType,
+    Form\Extension\Core\Type\ChoiceType
 };
 
-use AppBundle\Model\Board\Field as ModelField;
+use AppBundle\Model\Board\Field          as ModelField;
+use AppBundle\Model\Board\FieldInterface;
 
 /**
  * @author Maksym Ivanov
@@ -21,16 +22,18 @@ class BoardField extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('x', NumberType::class, [
+            ->add('x', IntegerType::class, [
                 'required' => true,
-//                'scale' => 'int',
+                'scale' => 30,
+                'empty_data' => 0
             ])
-            ->add('y', NumberType::class, [
+            ->add('y', IntegerType::class, [
                 'required' => true,
-//                'scale' => 'int',
+                'scale' =>  30,
+                'empty_data' => 0
             ])
-            ->add('value', TextType::class, [
-                'empty_data' => ''
+            ->add('value', ChoiceType::class, [
+                'choices' => ['', FieldInterface::PRIMARY_PLAYER_SYMBOL, FieldInterface::SECONDARY_PLAYER_SYMBOL]
             ]);
     }
 
@@ -44,6 +47,6 @@ class BoardField extends AbstractType
 
     public function getName()
     {
-        return 'board';
+        return 'boardField';
     }
 }

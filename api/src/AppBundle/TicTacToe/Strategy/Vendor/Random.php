@@ -4,11 +4,15 @@ namespace AppBundle\TicTacToe\Strategy\Vendor;
 
 use AppBundle\TicTacToe\Strategy\MoveInterface;
 
-class Simple implements MoveInterface
+class Random implements MoveInterface
 {
+    private $min;
+    private $max;
+
     public function __construct($params)
     {
-
+        $this->min = (int) $params['min'];
+        $this->max = (int) $params['max'];
     }
 
     /**
@@ -32,6 +36,19 @@ class Simple implements MoveInterface
      */
     public function makeMove($boardState, $playerUnit = 'X') : array
     {
-        return [1, 1, $playerUnit];
+        $x = rand($this->min, $this->max);
+        $y = rand($this->min, $this->max);
+
+        $maxCall     = pow($this->max, 2);
+        $currentCall = $this->min;
+        while (!empty($boardState[$x][$y]) || $currentCall >= $maxCall) {
+
+            $x = rand($this->min, $this->max);
+            $y = rand($this->min, $this->max);
+
+            $currentCall++;
+        }
+
+        return [$x, $y, $playerUnit];
     }
 }

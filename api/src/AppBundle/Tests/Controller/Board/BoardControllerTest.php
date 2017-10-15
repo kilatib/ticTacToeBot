@@ -60,7 +60,7 @@ class BoardControllerTest extends AbstractControllerTest
     /**
      *  No data
      */
-    public function testEmptySymfonyRequest()
+    public function testEmptyNextMoveRequest()
     {
         $client = $this->getClient();
         $client->request(Request::METHOD_POST, $this->getMoveUrl());

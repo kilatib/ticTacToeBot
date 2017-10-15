@@ -1,6 +1,8 @@
 <?php
 namespace AppBundle\Tests\Controller\Board;
 
+use Symfony\Component\HttpFoundation\Response;
+
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use AppBundle\Model\Board\FieldInterface;
 
@@ -113,9 +115,9 @@ abstract class AbstractControllerTest extends WebTestCase
      * @param  $client
      * @return \stdClass
      */
-    protected function assertAndParseApiErrorResponse($client)
+    protected function assertAndParseApiErrorResponse($client, $statusCode = Response::HTTP_BAD_REQUEST )
     {
-        $this->assertEquals(400, $client->getResponse()->getStatusCode());
+        $this->assertEquals($statusCode, $client->getResponse()->getStatusCode());
 
         $errorList = json_decode($client->getResponse()->getContent());
         $this->assertNotEmpty($errorList);

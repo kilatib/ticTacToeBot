@@ -9,5 +9,4 @@ class BoardException extends AppBundleException {
     const BOARD_SIZE    = 'Invalid board size';
     const STEP_SEQUENCE = 'Looks like some body did more move then it should';
     const GAME_OVER     = 'Game over!';
-    const GAME_DRAW     = 'Draw!';
 }

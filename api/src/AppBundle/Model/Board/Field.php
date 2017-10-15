@@ -54,7 +54,7 @@ class Field implements FieldInterface {
     public function setValue ($value)
     {
         if (!empty($value) && !in_array($value, $this->availableSymbols)) {
-            throw new FieldException(FieldException::INVALID_SYMBOL);
+            throw new FieldException(FieldException::INVALID_SYMBOL, 400);
         }
 
         $this->value = $value;

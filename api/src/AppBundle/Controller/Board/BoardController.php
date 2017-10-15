@@ -53,7 +53,7 @@ class BoardController extends FOSRestController implements ClassResourceInterfac
         try {
             $content = $request->getContent();
             if (empty($content)) {
-                throw new AppBundleException(AppBundleException::NO_CONTENT);
+                throw new AppBundleException(AppBundleException::NO_CONTENT, Response::HTTP_BAD_REQUEST);
             }
 
             $data = json_decode($request->getContent(), true);
@@ -63,7 +63,7 @@ class BoardController extends FOSRestController implements ClassResourceInterfac
                 ->submit($data);
 
             if(!$form->isValid()) {
-                throw new BoardException(BoardException::INVALID_BOARD);
+                throw new BoardException(BoardException::INVALID_BOARD, Response::HTTP_BAD_REQUEST);
             }
 
             /** @var Board $boardModel */
@@ -86,7 +86,7 @@ class BoardController extends FOSRestController implements ClassResourceInterfac
             $view->setData($nextMoveField);
 
         } catch (AppBundleException $e) {
-            $view->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $view->setStatusCode($e->getCode() ?? Response::HTTP_BAD_REQUEST);
             $view->setData([
                 [
                     'code'   => $e->getCode(),

@@ -4,6 +4,9 @@ namespace AppBundle\Model\Board;
 
 use PHPUnit\Runner\Exception;
 
+use Symfony\Component\HttpFoundation\Response;
+
+
 class Board implements BoardInterface {
     /**
      * @Serializer\Type("Field[]")
@@ -73,7 +76,8 @@ class Board implements BoardInterface {
             $minAmount = min(array_values($this->unitAmountList));
             $maxAmount = max(array_values($this->unitAmountList));
 
-            $flag = ($maxAmount - $minAmount) > 1;
+            $flag = ( count($this->unitAmountList) < 2 && $maxAmount > 1)
+                    || ($maxAmount - $minAmount) > 1;
         }
 
         return $flag;
@@ -100,15 +104,15 @@ class Board implements BoardInterface {
     {
         // check board size
         if (false === $this->isBoardSquare()) {
-            throw new BoardException(BoardException::BOARD_SIZE);
+            throw new BoardException(BoardException::BOARD_SIZE, Response::HTTP_BAD_REQUEST);
         }
 
         if ($this->isFull()) {
-            throw new BoardException(BoardException::GAME_OVER);
+            throw new BoardException(BoardException::GAME_OVER, Response::HTTP_MISDIRECTED_REQUEST);
         }
 
         if ($this->isStepSequenceBroken()) {
-            throw new BoardException(BoardException::GAME_OVER);
+            throw new BoardException(BoardException::STEP_SEQUENCE, Response::HTTP_MISDIRECTED_REQUEST);
         }
 
     }

@@ -6,7 +6,6 @@ services:
     api:
         image: whatwedo/symfony3
         container_name: ticTacToeBot-api
-#        command: /bin/sh /var/www/bin/init.sh
         environment:
             CONTAINER_TIMEZONE: ${CONTAINER_TIMEZONE}
             COMPOSER_ALLOW_SUPERUSER: 1 # Allow Composer to be run as root

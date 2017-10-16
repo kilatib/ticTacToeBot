@@ -55,6 +55,10 @@ class BoardControllerTest extends AbstractControllerTest
         $this->assertObjectHasAttribute('x',     $respondField);
         $this->assertObjectHasAttribute('y',     $respondField);
         $this->assertObjectHasAttribute('value', $respondField);
+
+        $this->assertNotNull($respondField->x);
+        $this->assertNotNull($respondField->y);
+        $this->assertNotNull($respondField->value);
     }
 
     /**

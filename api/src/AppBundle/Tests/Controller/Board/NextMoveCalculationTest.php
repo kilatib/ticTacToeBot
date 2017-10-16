@@ -28,7 +28,7 @@ class NextMoveCalculationTest extends AbstractControllerTest
      * '' '' ''
      * '' '' ''
      */
-    public function tesNextMoveAction()
+    public function testNextMoveAction()
     {
         $boardRequest = $this->generateEmptyRequestBoard();
         $client = $this->apiRequest(Request::METHOD_POST, $this->getMoveUrl(), $boardRequest);
@@ -47,7 +47,7 @@ class NextMoveCalculationTest extends AbstractControllerTest
 
         // make one more request
         // but add first symbol AI should take another
-        $boardRequest[1]->value = FieldInterface::PRIMARY_PLAYER_SYMBOL;
+        $boardRequest['board'][1]['value'] = FieldInterface::PRIMARY_PLAYER_SYMBOL;
         $client = $this->apiRequest(Request::METHOD_POST, $this->getMoveUrl(), $boardRequest);
 
         $respondField = json_decode($client->getResponse()->getContent());
@@ -245,6 +245,9 @@ class NextMoveCalculationTest extends AbstractControllerTest
 
     /**
      * Set unreal combination
+     *    Unfortunately in my current logic this test is duplicate for testWinnerCombinationPresent
+     *     because I have decided: search more than one combination it is overhead,
+     *     but it present here because I suppose some strategy vendor can implement it
      *
      * X X X
      * 0 0 O
@@ -282,8 +285,8 @@ class NextMoveCalculationTest extends AbstractControllerTest
         $boardRequest['board'][8]['value'] = '';
 
         $client = $this->apiRequest(Request::METHOD_POST, $this->getMoveUrl(), $boardRequest);
-        $error = $this->assertAndParseApiErrorResponse($client, Response::HTTP_MISDIRECTED_REQUEST);
-        $this->assertContains(BoardException::INVALID_BOARD, $error->detail);
+        $error = $this->assertAndParseApiErrorResponse($client, Response::HTTP_UNAUTHORIZED);
+        $this->assertContains(StrategyException::WINNER_COMBINATION_PRESENT, $error->detail);
 
         /**
          * X - O
@@ -307,8 +310,8 @@ class NextMoveCalculationTest extends AbstractControllerTest
         $boardRequest['board'][8]['value'] = FieldInterface::SECONDARY_PLAYER_SYMBOL;
 
         $client = $this->apiRequest(Request::METHOD_POST, $this->getMoveUrl(), $boardRequest);
-        $error = $this->assertAndParseApiErrorResponse($client, Response::HTTP_MISDIRECTED_REQUEST);
-        $this->assertContains(BoardException::INVALID_BOARD, $error->detail);
+        $error = $this->assertAndParseApiErrorResponse($client, Response::HTTP_UNAUTHORIZED);
+        $this->assertContains(StrategyException::WINNER_COMBINATION_PRESENT, $error->detail);
 
         /**
          * X X X
@@ -332,7 +335,7 @@ class NextMoveCalculationTest extends AbstractControllerTest
         $boardRequest['board'][8]['value'] = FieldInterface::SECONDARY_PLAYER_SYMBOL;
 
         $client = $this->apiRequest(Request::METHOD_POST, $this->getMoveUrl(), $boardRequest);
-        $error = $this->assertAndParseApiErrorResponse($client, Response::HTTP_MISDIRECTED_REQUEST);
-        $this->assertContains(BoardException::INVALID_BOARD, $error->detail);
+        $error = $this->assertAndParseApiErrorResponse($client, Response::HTTP_UNAUTHORIZED);
+        $this->assertContains(StrategyException::WINNER_COMBINATION_PRESENT, $error->detail);
     }
 }

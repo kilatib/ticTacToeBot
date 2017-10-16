@@ -3,7 +3,9 @@
 namespace AppBundle\TicTacToe\Factory;
 
 use AppBundle\TicTacToe\Strategy\{
-    MoveInterface, Vendor\Minmax, Vendor\Random
+    MoveInterface,
+    Vendor\ZeroSum,
+    Vendor\Random
 };
 
 class Strategy
@@ -27,8 +29,8 @@ class Strategy
             case 'random':
                 $vendor = new Random($this->vendorConfig[$vendorName]);
                 break;
-            case 'minmax':
-                $vendor = new Minmax($this->vendorConfig[$vendorName]);
+            case 'ZeroSum':
+                $vendor = new ZeroSum($this->vendorConfig[$vendorName]);
                 break;
             default:
                 new StrategyException(sprintf(StrategyException::NOT_FOUND, $this->vendorConfig->vendor));

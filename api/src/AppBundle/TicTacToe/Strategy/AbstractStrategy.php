@@ -4,6 +4,8 @@
  */
 namespace AppBundle\TicTacToe\Strategy;
 
+use AppBundle\Model\Board\FieldInterface;
+
 abstract class AbstractStrategy
 {
     /**
@@ -84,6 +86,14 @@ abstract class AbstractStrategy
             list($this->primaryPlayerSymbol, $this->secondaryPlayerSymbol)
                 = [$this->secondaryPlayerSymbol, $this->primaryPlayerSymbol];
         }
+
+        if (empty($this->primaryPlayerSymbol)) {
+            $this->primaryPlayerSymbol = FieldInterface::PRIMARY_PLAYER_SYMBOL;
+        }
+
+        if (empty($this->secondaryPlayerSymbol)) {
+            $this->secondaryPlayerSymbol = FieldInterface::SECONDARY_PLAYER_SYMBOL;
+        }
     }
 
     /**
@@ -135,10 +145,11 @@ abstract class AbstractStrategy
     }
 
     /**
-     * Detect is winner combination present in given row
+     * Detect is winner combination present in given row set
+     *    If winner combination present as result provide winner symbol
      *
      * @param array $matrix
-     * @return bool
+     * @return bool|string
      */
     protected function isWinnerCombinationInRowSet($matrix)
     {
@@ -146,11 +157,14 @@ abstract class AbstractStrategy
 
         // in rows
         foreach ($matrix as $row) {
-            $duplicateCount = count($row) - count(array_unique($row)) + 1 ; // one symbol always still exist
-
-            if ($duplicateCount >= $this->winLength) {
-                $flag = true;
-                break;
+            $tmpRow = array_diff($row, ['', '-']);                        // remove all not filled elements
+            if (!empty($tmpRow)) {
+                $uniqueList     = array_unique($tmpRow);
+                $duplicateCount = count($tmpRow) - count($uniqueList) + 1 ; // one symbol always still exist
+                if ($duplicateCount >= $this->winLength) {
+                    $flag = reset($uniqueList);
+                    break;
+                }
             }
         }
 
@@ -170,9 +184,7 @@ abstract class AbstractStrategy
             $diagonalVector[] = $matrix[$i][$i];
         }
 
-        $duplicateCount = count($diagonalVector) - count(array_unique($diagonalVector)) + 1; // one symbol always still exist
-
-        return $duplicateCount >= $this->winLength;
+        return $this->isWinnerCombinationInRowSet([$diagonalVector]);
     }
 
     public function __construct($params)
@@ -190,25 +202,40 @@ abstract class AbstractStrategy
     public function isWinnerCombinationPresent($boardState)
     {
         // check rows
+        $winnerIn = $this->getWinnerSymbolIfPresent($boardState);
+
+        return !empty($winnerIn);
+    }
+
+    /**
+     * Try to find winner combinations
+     *
+     * @param array $boardState
+     *
+     * @return bool
+     */
+    public function getWinnerSymbolIfPresent($boardState)
+    {
+        // check rows
         $winnerIn = $this->isWinnerCombinationInRowSet($boardState);
 
         // check columns
         $columnList = [];
         foreach ($boardState as $key => $row) {
-            $columnList[] = array_column($this->boardState, $key);
+            $columnList[] = array_column($boardState, $key);
         }
-        $winnerIn = $winnerIn || $this->isWinnerCombinationInRowSet($columnList);
+        $winnerIn = empty($winnerIn) ? $this->isWinnerCombinationInRowSet($columnList) : $winnerIn;
 
         // left -> right diagonal vectors
-        $winnerIn = $winnerIn || $this->isWinnerCombinationInDiagonal($boardState);
+        $winnerIn = empty($winnerIn) ? $this->isWinnerCombinationInDiagonal($boardState) : $winnerIn;
 
         // right -> left diagonal vectors
         // Flip matrix for always move from left to right
-        $reverseArray = $this->boardState;
+        $reverseArray = $boardState;
         foreach ($reverseArray as $key => $row) {
             $reverseArray[$key] = array_reverse($row);
         }
-        $winnerIn = $winnerIn || $this->isWinnerCombinationInDiagonal($reverseArray);
+        $winnerIn = empty($winnerIn) ? $this->isWinnerCombinationInDiagonal($reverseArray) : $winnerIn;
 
         return $winnerIn;
     }

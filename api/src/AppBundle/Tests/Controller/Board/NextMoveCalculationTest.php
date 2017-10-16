@@ -14,6 +14,12 @@ use AppBundle\Model\Board\{
 
 use AppBundle\TicTacToe\Strategy\StrategyException;
 
+/**
+ * Class NextMoveCalculationTest
+ *     Test covers more validation practices for next-move logic
+ *
+ * @package AppBundle\Tests\Controller\Board
+ */
 class NextMoveCalculationTest extends AbstractControllerTest
 {
 

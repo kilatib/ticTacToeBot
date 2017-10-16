@@ -15,6 +15,12 @@ use Symfony\Component\{
  */
 class Board extends AbstractType
 {
+    /**
+     * Simple form collection
+     *
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('board', CollectionType::class, [

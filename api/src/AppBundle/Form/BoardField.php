@@ -19,6 +19,12 @@ use AppBundle\Model\Board\FieldInterface;
  */
 class BoardField extends AbstractType
 {
+    /**
+     * Validators for fields
+     *
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder

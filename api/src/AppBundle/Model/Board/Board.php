@@ -17,6 +17,12 @@ class Board implements BoardInterface {
     protected $fieldList    = [];
     private $unitAmountList = [];
 
+    /**
+     * Add field to point vector
+     *
+     * @param FieldInterface $field
+     * @return array
+     */
     public function setField(FieldInterface $field) : array
     {
         if ($field->isValid()) {
@@ -34,6 +40,30 @@ class Board implements BoardInterface {
         return $this->fieldList;
     }
 
+    /**
+     * @param FieldInterface $field
+     * @return $this
+     */
+    public function applyFieldModel (FieldInterface $field)
+    {
+        foreach ($this->fieldList as $key => $fieldModel) {
+            if (
+                $fieldModel->getX() == $field->getX()
+                && $fieldModel->getY() == $field->getY()
+            ) {
+                $this->fieldList[$key] = $field;
+                break;
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Create to capability: transferring data to \AppBundle\TicTacToe\Strategy\MoveInterface
+     *
+     * @return array
+     */
     public function toArray(): array
     {
         $result = [];
@@ -59,6 +89,11 @@ class Board implements BoardInterface {
         return $totalSymbolsAmount >= count($this->fieldList);
     }
 
+    /**
+     * Tic Tac Toe mean game field is square
+     *
+     * @return bool
+     */
     public function isBoardSquare(): bool
     {
         $fieldAmount = count($this->fieldList);
@@ -69,6 +104,13 @@ class Board implements BoardInterface {
         ;
     }
 
+    /**
+     * If client done not well we probably
+     * have possibility have tow sequence step from it
+     *  Added to Unit test
+     *
+     * @return bool
+     */
     public function isStepSequenceBroken(): bool
     {
         $flag = false;
@@ -83,6 +125,11 @@ class Board implements BoardInterface {
         return $flag;
     }
 
+    /**
+     * I believe user can choice symbols for play which he loves
+     *
+     * @return string
+     */
     public function nextUnit(): string
     {
         $symbol = FieldInterface::PRIMARY_PLAYER_SYMBOL;
@@ -100,6 +147,11 @@ class Board implements BoardInterface {
         return $symbol;
     }
 
+    /**
+     * Test model
+     *
+     * @throws BoardException
+     */
     public function validate()
     {
         // check board size

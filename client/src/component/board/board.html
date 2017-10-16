@@ -29,10 +29,18 @@
     </div>
 </div>
 
-<div ng-if="$ctrl.fetchErrorList.length" class="board-errorList">
-    <div ng-repeat="error in $ctrl.fetchErrorList">{{ error.detail }}</div>
+<div ng-if="$ctrl.fetchErrorList.length" class="board-errorList"  ng-click="$ctrl.reset()">
+    <div ng-repeat="error in $ctrl.fetchErrorList">
+        {{ error.detail }}
+        <br />
+        Click here to restart
+    </div>
 </div>
 
 <div class="board-control">
-    <span ng-click="$ctrl.reset()">Reset</span>
+    <span ng-click="$ctrl.reset()">
+        (
+            <span ng-repeat="symbol in $ctrl.symbols ">`{{symbol}}`: {{ $ctrl.score[symbol] }}</span>
+        )
+    </span>
 </div>

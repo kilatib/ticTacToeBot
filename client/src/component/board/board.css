@@ -88,16 +88,18 @@ board {
 
 .board-errorList {
     position: absolute;
-    top: 2vh;
-    right: 1vw;
+    top: 50%;
+    left: calc(50% - 20vw);
 
     background-color: #fd4c5a;
     color: white;
 
-    width: auto;
+    width: 40vw;
     height: auto;
 
     padding: 1vh 2vw;
+    text-align: center;
+    cursor: pointer;
 }
 
 .board-control {

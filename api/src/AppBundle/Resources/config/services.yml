@@ -1,5 +1,5 @@
 services:
     factory.tactactoe:
-        class: AppBundle\TicTacToe\Factory\Strategy
+        class: AppBundle\TicTacToe\Strategy\StrategyFactory
         arguments:
             - '%tactactoe.provider%'

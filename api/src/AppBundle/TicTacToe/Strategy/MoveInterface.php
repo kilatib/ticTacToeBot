@@ -2,7 +2,7 @@
 
 namespace AppBundle\TicTacToe\Strategy;
 
-interface MoveInterface
+interface MoveInterface extends StrategyInterface
 {
     /**
      * Makes a move using the $boardState

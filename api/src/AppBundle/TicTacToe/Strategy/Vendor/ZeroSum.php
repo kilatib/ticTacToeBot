@@ -51,7 +51,7 @@ class ZeroSum extends AbstractStrategy implements MoveInterface
             $isWinCombinationPresent
             || $depth >= $this->depth
         ) {
-            $score = 0; // draw
+            $score = $coefficient * ( ($X == $Y) ? 1 : 0); // draw, but be on main diagonal big opportunity
             if ($isWinCombinationPresent) {
                 $winnerUnit = $this->getWinnerSymbolIfPresent($boardState);
                 $score = $coefficient * (( $winnerUnit === $unit ) ? -$this->winLength : $this->winLength);
@@ -158,7 +158,10 @@ class ZeroSum extends AbstractStrategy implements MoveInterface
          *
          *   if you in one step to be winner why not ?
          */
-        if (abs($preventPointAI[2]) === abs($attackPointAI[2])) {
+        if (
+            abs($preventPointAI[2]) === abs($attackPointAI[2])
+            || abs($preventPointAI[2]) < abs($attackPointAI[2])
+        ) {
             $pointAI = $attackPointAI;
         }
 

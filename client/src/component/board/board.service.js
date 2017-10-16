@@ -7,6 +7,10 @@
             this.board = $resource('make-move', {}, {
                 makeMove: {
                     method: 'POST'
+                },
+                gameWinner: {
+                    url:    'game-winner',
+                    method: 'POST'
                 }
             });
 

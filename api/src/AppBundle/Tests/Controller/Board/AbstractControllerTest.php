@@ -1,11 +1,21 @@
 <?php
 namespace AppBundle\Tests\Controller\Board;
 
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\{
+    Response,
+    Request
+};
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use AppBundle\Model\Board\FieldInterface;
 
+/**
+ * Class AbstractControllerTest
+ *
+ *   shared fixtures creation between tests
+ *
+ * @package AppBundle\Tests\Controller\Board
+ */
 abstract class AbstractControllerTest extends WebTestCase
 {
     const BOARD_SIZE = 3;
@@ -159,6 +169,48 @@ abstract class AbstractControllerTest extends WebTestCase
             ['CONTENT_TYPE' => 'application/json'],
             json_encode($data)
         );
+
+        return $client;
+    }
+
+    /**
+     * Test AI step response
+     *
+     * @param array $boardRequest
+     * @param int $x
+     * @param int $y
+     * @param string $value
+     *
+     * @return \Symfony\Bundle\FrameworkBundle\Client
+     */
+    protected function requestAndAssertField ($boardRequest, $x = null, $y = null, $value = null)
+    {
+        $client = $this->apiRequest(Request::METHOD_POST, $this->getMoveUrl(), $boardRequest);
+
+        //
+        // test correct response
+        $response = $client->getResponse()->getContent();
+        $respondField = json_decode($response);
+
+        $this->assertObjectHasAttribute('x', $respondField, 'X coordinate not detected');
+        $this->assertObjectHasAttribute('y', $respondField, 'Y coordinate not detected');
+        $this->assertObjectHasAttribute('value', $respondField, 'Move symbol not detetced');
+
+        $this->assertNotNull($respondField->x);
+        $this->assertNotNull($respondField->y);
+        $this->assertNotNull($respondField->value);
+
+        if (!empty($x)) {
+            $this->assertEquals($x, $respondField->x);
+        }
+
+        if (!empty($y)) {
+            $this->assertEquals($y, $respondField->y);
+        }
+
+        if (!empty($value)) {
+            $this->assertEquals($value, $respondField->value);
+        }
 
         return $client;
     }

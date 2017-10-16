@@ -1,17 +1,31 @@
 <?php
 
-namespace AppBundle\TicTacToe\Factory;
+namespace AppBundle\TicTacToe\Strategy;
 
-use AppBundle\TicTacToe\Strategy\{
-    MoveInterface,
-    Vendor\ZeroSum,
-    Vendor\Random
+
+use AppBundle\TicTacToe\Strategy\Vendor\{
+    ZeroSum,
+    Random
 };
 
-class Strategy
+/**
+ * Class Strategy
+ *      Factory for create strategies according configs
+ *         Pay attention right set place: api/app/config/parameters.yml
+ *
+ *
+ * @package AppBundle\TicTacToe\Factory
+ */
+class StrategyFactory
 {
     private $vendorConfig;
 
+    /**
+     * Strategy constructor.
+     *
+     * @param array $vendorConfig
+     * @throws StrategyException
+     */
     public function __construct($vendorConfig)
     {
         if (empty($vendorConfig['vendor'])) {
@@ -21,6 +35,13 @@ class Strategy
         $this->vendorConfig = $vendorConfig;
     }
 
+    /**
+     * Build strategy classes according configs
+     *      this method has one minus it build Classes inside it is not good solution,
+     *      but set ServiceLocator here and build according string more worse solution
+     *
+     * @return MoveInterface
+     */
     public function getStrategy() : MoveInterface
     {
         $vendor      = null;

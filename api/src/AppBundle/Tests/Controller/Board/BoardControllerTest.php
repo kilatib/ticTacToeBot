@@ -13,6 +13,11 @@ use Symfony\Component\HttpFoundation\{
     Response
 };
 
+/***
+ * Class BoardControllerTest
+ *
+ * @package AppBundle\Tests\Controller\Board
+ */
 class BoardControllerTest extends AbstractControllerTest
 {
     /**
@@ -44,21 +49,7 @@ class BoardControllerTest extends AbstractControllerTest
      */
     public function testPostMakeMoveAction()
     {
-        $client = $this->apiRequest(Request::METHOD_POST, $this->getMoveUrl(), $this->generateEmptyRequestBoard());
-        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
-
-        //
-        // test correct response
-        $response = $client->getResponse()->getContent();
-        $respondField = json_decode($response);
-
-        $this->assertObjectHasAttribute('x',     $respondField);
-        $this->assertObjectHasAttribute('y',     $respondField);
-        $this->assertObjectHasAttribute('value', $respondField);
-
-        $this->assertNotNull($respondField->x);
-        $this->assertNotNull($respondField->y);
-        $this->assertNotNull($respondField->value);
+        $this->requestAndAssertField( $this->generateEmptyRequestBoard());
     }
 
     /**
@@ -75,4 +66,71 @@ class BoardControllerTest extends AbstractControllerTest
         $this->assertContains(AppBundleException::NO_CONTENT, $error->detail);
     }
 
+    /**
+     *  Test communication if AI winner
+     */
+    public function testGameWinnerDetection()
+    {
+        $client         = $this->getClient();
+        $gameWinnerLink = $client->getContainer()->get('router')->generate('game_winner');
+
+        /**
+         * O X X
+         * - O -
+         * - X -
+         */
+        $boardRequest = $this->generateEmptyRequestBoard();
+
+        // vector: 1
+        $boardRequest['board'][0]['value'] = FieldInterface::SECONDARY_PLAYER_SYMBOL;
+        $boardRequest['board'][1]['value'] = FieldInterface::PRIMARY_PLAYER_SYMBOL;
+        $boardRequest['board'][2]['value'] = FieldInterface::PRIMARY_PLAYER_SYMBOL;
+
+        // vector: 2
+        $boardRequest['board'][3]['value'] = '';
+        $boardRequest['board'][4]['value'] = FieldInterface::SECONDARY_PLAYER_SYMBOL;
+        $boardRequest['board'][5]['value'] = '';
+
+        // vector: 3
+        $boardRequest['board'][6]['value'] = '';
+        $boardRequest['board'][7]['value'] = FieldInterface::PRIMARY_PLAYER_SYMBOL;
+        $boardRequest['board'][8]['value'] = FieldInterface::SECONDARY_PLAYER_SYMBOL;
+
+        $client = $this->apiRequest(Request::METHOD_POST, $gameWinnerLink, $boardRequest);
+        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+
+        $response = $client->getResponse()->getContent();
+        $responseJson = json_decode($response);
+
+        $this->assertObjectHasAttribute('winner', $responseJson);
+        $this->assertEquals(FieldInterface::SECONDARY_PLAYER_SYMBOL, $responseJson->winner);
+
+        // test empty winner
+
+        $boardRequest = $this->generateEmptyRequestBoard();
+
+        // vector: 1
+        $boardRequest['board'][0]['value'] = FieldInterface::PRIMARY_PLAYER_SYMBOL;
+        $boardRequest['board'][1]['value'] = '';
+        $boardRequest['board'][2]['value'] = '';
+
+        // vector: 2
+        $boardRequest['board'][3]['value'] = '';
+        $boardRequest['board'][4]['value'] = '';
+        $boardRequest['board'][5]['value'] = '';
+
+        // vector: 3
+        $boardRequest['board'][6]['value'] = '';
+        $boardRequest['board'][7]['value'] = '';
+        $boardRequest['board'][8]['value'] = '';
+
+        $client = $this->apiRequest(Request::METHOD_POST, $gameWinnerLink, $boardRequest);
+        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+
+        $response = $client->getResponse()->getContent();
+        $responseJson = json_decode($response);
+
+        $this->assertObjectHasAttribute('winner', $responseJson);
+        $this->assertEmpty($responseJson->winner, 'Winner not empty strange');
+    }
 }

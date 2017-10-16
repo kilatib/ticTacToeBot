@@ -6,7 +6,7 @@ namespace AppBundle\TicTacToe\Strategy;
 
 use AppBundle\Model\Board\FieldInterface;
 
-abstract class AbstractStrategy
+abstract class AbstractStrategy implements StrategyInterface
 {
     /**
      * Board state
@@ -199,7 +199,7 @@ abstract class AbstractStrategy
      *
      * @return bool
      */
-    public function isWinnerCombinationPresent($boardState)
+    public function isWinnerCombinationPresent(array $boardState) : bool
     {
         // check rows
         $winnerIn = $this->getWinnerSymbolIfPresent($boardState);
@@ -212,9 +212,9 @@ abstract class AbstractStrategy
      *
      * @param array $boardState
      *
-     * @return bool
+     * @return string
      */
-    public function getWinnerSymbolIfPresent($boardState)
+    public function getWinnerSymbolIfPresent($boardState) : string
     {
         // check rows
         $winnerIn = $this->isWinnerCombinationInRowSet($boardState);

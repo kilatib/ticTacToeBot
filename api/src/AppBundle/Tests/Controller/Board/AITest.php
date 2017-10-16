@@ -140,6 +140,11 @@ class AITest extends AbstractControllerTest
     }
 
     /**
+     * This test represent the situation when minSum of step be enough
+     *  to prevent player win but in that time enough to be winner.
+     *  Network with one perception should resolve this task
+     *  But what about alpha-beta clipping or minmax strategy
+     *
      * X O X
      * X O X
      * O - -

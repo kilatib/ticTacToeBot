@@ -133,9 +133,33 @@ class ZeroSum extends AbstractStrategy implements MoveInterface
         }
 
         if ($this->isPrimarySymbol($playerUnit)) {
-            $pointAI = $this->minmax($boardState, $playerUnit, 0, [], 1);
+            $attackPointAI = $this->minmax($boardState, $playerUnit, 0, [], 1);
+
+            // try to prevent winning in one step
+            $preventPointAI  =  $this->minmax($boardState, $playerUnit, $this->depth - 1, [], 1);
+
+            $pointAI = $attackPointAI;
         } else {
-            $pointAI = $this->minmax($boardState, $playerUnit);
+            $preventPointAI = $this->minmax($boardState, $playerUnit);
+
+            // check possibility to be winner in one step
+            $attackPointAI = $this->minmax($boardState, $this->getOppositeSymbol($playerUnit), $this->depth - 1);
+
+            $pointAI = $preventPointAI;
+        }
+
+        /**
+         * Classic zero sum tactic means that we use only have one way
+         *   First player always attack (max strategy)
+         *   Second player always try be alive (min strategy)
+         *
+         *   This tactic create a situation when AI loose win or was loss when we it have choice
+         *      It is out of rules but I have try to mix both variant check if you are in one step to win or loss
+         *
+         *   if you in one step to be winner why not ?
+         */
+        if (abs($preventPointAI[2]) === abs($attackPointAI[2])) {
+            $pointAI = $attackPointAI;
         }
 
         return [$pointAI[0], $pointAI[1], $playerUnit];

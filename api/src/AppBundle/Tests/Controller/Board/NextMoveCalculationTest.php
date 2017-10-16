@@ -12,6 +12,8 @@ use AppBundle\Model\Board\{
     BoardException
 };
 
+use AppBundle\TicTacToe\Strategy\StrategyException;
+
 class NextMoveCalculationTest extends AbstractControllerTest
 {
 
@@ -162,33 +164,8 @@ class NextMoveCalculationTest extends AbstractControllerTest
         $boardRequest['board'][4]['value'] = FieldInterface::SECONDARY_PLAYER_SYMBOL;
 
         $client = $this->apiRequest(Request::METHOD_POST, $this->getMoveUrl(), $boardRequest);
-        $error = $this->assertAndParseApiErrorResponse($client, Response::HTTP_MISDIRECTED_REQUEST);
-        $this->assertContains(BoardException::GAME_OVER, $error->detail);
-
-        /**
-         * X X O
-         * O X -
-         * O - X
-        */
-        $boardRequest = $this->generateEmptyRequestBoard();
-        // vector: 1
-        $boardRequest['board'][0]['value'] = FieldInterface::PRIMARY_PLAYER_SYMBOL;
-        $boardRequest['board'][1]['value'] = FieldInterface::PRIMARY_PLAYER_SYMBOL;
-        $boardRequest['board'][2]['value'] = FieldInterface::SECONDARY_PLAYER_SYMBOL;
-
-        // vector: 2
-        $boardRequest['board'][3]['value'] = FieldInterface::SECONDARY_PLAYER_SYMBOL;
-        $boardRequest['board'][4]['value'] = FieldInterface::PRIMARY_PLAYER_SYMBOL;
-        $boardRequest['board'][5]['value'] = '';
-
-        // vector: 3
-        $boardRequest['board'][6]['value'] = FieldInterface::SECONDARY_PLAYER_SYMBOL;
-        $boardRequest['board'][7]['value'] = '';
-        $boardRequest['board'][8]['value'] = FieldInterface::PRIMARY_PLAYER_SYMBOL;
-
-        $client = $this->apiRequest(Request::METHOD_POST, $this->getMoveUrl(), $boardRequest);
-        $error = $this->assertAndParseApiErrorResponse($client, Response::HTTP_MISDIRECTED_REQUEST);
-        $this->assertContains(BoardException::GAME_OVER, $error->detail);
+        $error = $this->assertAndParseApiErrorResponse($client, Response::HTTP_UNAUTHORIZED);
+        $this->assertContains(StrategyException::WINNER_COMBINATION_PRESENT, $error->detail);
 
         /**
          * X O O
@@ -212,8 +189,58 @@ class NextMoveCalculationTest extends AbstractControllerTest
         $boardRequest['board'][8]['value'] = '';
 
         $client = $this->apiRequest(Request::METHOD_POST, $this->getMoveUrl(), $boardRequest);
-        $error = $this->assertAndParseApiErrorResponse($client, Response::HTTP_MISDIRECTED_REQUEST);
-        $this->assertContains(BoardException::GAME_OVER, $error->detail);
+        $error = $this->assertAndParseApiErrorResponse($client, Response::HTTP_UNAUTHORIZED);
+        $this->assertContains(StrategyException::WINNER_COMBINATION_PRESENT, $error->detail);
+
+        /**
+         * X X O
+         * O X -
+         * O - X
+        */
+        $boardRequest = $this->generateEmptyRequestBoard();
+        // vector: 1
+        $boardRequest['board'][0]['value'] = FieldInterface::PRIMARY_PLAYER_SYMBOL;
+        $boardRequest['board'][1]['value'] = FieldInterface::PRIMARY_PLAYER_SYMBOL;
+        $boardRequest['board'][2]['value'] = FieldInterface::SECONDARY_PLAYER_SYMBOL;
+
+        // vector: 2
+        $boardRequest['board'][3]['value'] = FieldInterface::SECONDARY_PLAYER_SYMBOL;
+        $boardRequest['board'][4]['value'] = FieldInterface::PRIMARY_PLAYER_SYMBOL;
+        $boardRequest['board'][5]['value'] = '';
+
+        // vector: 3
+        $boardRequest['board'][6]['value'] = FieldInterface::SECONDARY_PLAYER_SYMBOL;
+        $boardRequest['board'][7]['value'] = '';
+        $boardRequest['board'][8]['value'] = FieldInterface::PRIMARY_PLAYER_SYMBOL;
+
+        $client = $this->apiRequest(Request::METHOD_POST, $this->getMoveUrl(), $boardRequest);
+        $error = $this->assertAndParseApiErrorResponse($client, Response::HTTP_UNAUTHORIZED);
+        $this->assertContains(StrategyException::WINNER_COMBINATION_PRESENT, $error->detail);
+
+        /**
+         * X X O
+         * O O -
+         * O - X
+         */
+        $boardRequest = $this->generateEmptyRequestBoard();
+        // vector: 1
+        $boardRequest['board'][0]['value'] = FieldInterface::PRIMARY_PLAYER_SYMBOL;
+        $boardRequest['board'][1]['value'] = FieldInterface::PRIMARY_PLAYER_SYMBOL;
+        $boardRequest['board'][2]['value'] = FieldInterface::SECONDARY_PLAYER_SYMBOL;
+
+        // vector: 2
+        $boardRequest['board'][3]['value'] = FieldInterface::SECONDARY_PLAYER_SYMBOL;
+        $boardRequest['board'][4]['value'] = FieldInterface::SECONDARY_PLAYER_SYMBOL;
+        $boardRequest['board'][5]['value'] = '';
+
+        // vector: 3
+        $boardRequest['board'][6]['value'] = FieldInterface::SECONDARY_PLAYER_SYMBOL;
+        $boardRequest['board'][7]['value'] = '';
+        $boardRequest['board'][8]['value'] = FieldInterface::PRIMARY_PLAYER_SYMBOL;
+
+        $client = $this->apiRequest(Request::METHOD_POST, $this->getMoveUrl(), $boardRequest);
+        $error = $this->assertAndParseApiErrorResponse($client, Response::HTTP_UNAUTHORIZED);
+        $this->assertContains(StrategyException::WINNER_COMBINATION_PRESENT, $error->detail);
     }
 
     /**

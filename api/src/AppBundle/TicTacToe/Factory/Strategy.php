@@ -3,8 +3,7 @@
 namespace AppBundle\TicTacToe\Factory;
 
 use AppBundle\TicTacToe\Strategy\{
-    MoveInterface,
-    Vendor\Random
+    MoveInterface, Vendor\Minmax, Vendor\Random
 };
 
 class Strategy
@@ -27,6 +26,9 @@ class Strategy
         switch($vendorName) {
             case 'random':
                 $vendor = new Random($this->vendorConfig[$vendorName]);
+                break;
+            case 'minmax':
+                $vendor = new Minmax($this->vendorConfig[$vendorName]);
                 break;
             default:
                 new StrategyException(sprintf(StrategyException::NOT_FOUND, $this->vendorConfig->vendor));

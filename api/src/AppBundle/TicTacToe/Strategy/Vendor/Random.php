@@ -2,15 +2,21 @@
 
 namespace AppBundle\TicTacToe\Strategy\Vendor;
 
-use AppBundle\TicTacToe\Strategy\MoveInterface;
+use AppBundle\TicTacToe\Strategy\ {
+    MoveInterface,
+    AbstractStrategy,
+    StrategyException
+};
 
-class Random implements MoveInterface
+class Random extends AbstractStrategy implements MoveInterface
 {
     private $min;
     private $max;
 
     public function __construct($params)
     {
+        parent::__construct($params);
+
         $this->min = (int) $params['min'];
         $this->max = (int) $params['max'];
     }
@@ -33,9 +39,16 @@ class Random implements MoveInterface
      * @param string $playerUnit Player unit representation
      *
      * @return array
+     * @throws StrategyException
      */
     public function makeMove($boardState, $playerUnit = 'X') : array
     {
+        $this->setBoardState($boardState);
+        $this->validate($playerUnit);
+        if ($this->isWinnerCombinationPresent($boardState)) {
+            throw new StrategyException(StrategyException::WINNER_COMBINATION_PRESENT, 401);
+        }
+
         $x = rand($this->min, $this->max);
         $y = rand($this->min, $this->max);
 

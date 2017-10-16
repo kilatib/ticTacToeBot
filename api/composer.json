@@ -2,6 +2,13 @@
     "name": "kilatib/api",
     "license": "proprietary",
     "type": "project",
+    "authors": [
+        {
+            "name": "Vitalii Shtykhno",
+            "email": "kilatib@gmail.com",
+            "role": "Developer"
+        }
+    ],
     "autoload": {
         "psr-4": {
             "AppBundle\\": "src/AppBundle"

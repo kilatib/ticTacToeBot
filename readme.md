@@ -18,7 +18,7 @@ Tic Tac Toe Bot
 
 ````
 - api        // represent server level {Symfony, PHP} bundle realization: `api/src/AppBundle`
-- client     // represent client level {angularjs, html, css}
+- client     // represent client level {angularjs, html, css} ralization: `client/src`
 - bin        // util bash scripts to easy works with docker
 - screenshot // several screens of game 
 ````

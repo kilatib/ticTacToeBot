@@ -141,6 +141,12 @@
                         ) {
                             var playerSymbol = $ctrl.symbols[$ctrl.playerSymbolId];
                             $ctrl.score[playerSymbol]++;
+                            // disable fields
+                            $ctrl.board.forEach(function (field) {
+                                if (field.value === '') {
+                                    field.value = '-';
+                                }
+                            });
                         }
                     }
                 }

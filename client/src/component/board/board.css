@@ -90,16 +90,14 @@ board {
     position: absolute;
     top: 50%;
     left: calc(50% - 20vw);
-
     background-color: #fd4c5a;
     color: white;
-
     width: 40vw;
     height: auto;
-
     padding: 1vh 2vw;
     text-align: center;
     cursor: pointer;
+    border-radius: 500vw;
 }
 
 .board-control {

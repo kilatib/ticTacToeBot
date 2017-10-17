@@ -32,98 +32,98 @@ class AITest extends AbstractControllerTest
      */
     public function testPreventWin ()
     {
-        /**
-         * O - X
-         * - X -
-         * - - -
-         */
-        $boardRequest = $this->generateEmptyRequestBoard();
-        // vector: 1
-        $boardRequest['board'][0]['value'] = FieldInterface::SECONDARY_PLAYER_SYMBOL;
-        $boardRequest['board'][1]['value'] = '';
-        $boardRequest['board'][2]['value'] = FieldInterface::PRIMARY_PLAYER_SYMBOL;
-
-        // vector: 2
-        $boardRequest['board'][3]['value'] = '';
-        $boardRequest['board'][4]['value'] = FieldInterface::PRIMARY_PLAYER_SYMBOL;
-        $boardRequest['board'][5]['value'] = '';
-
-        // vector: 3
-        $boardRequest['board'][6]['value'] = '';
-        $boardRequest['board'][7]['value'] = '';
-        $boardRequest['board'][8]['value'] = '';
-
-        $this->requestAndAssertField($boardRequest, 2, 0, FieldInterface::SECONDARY_PLAYER_SYMBOL);
-
-        /**
-         * X 0 -
-         * - - -
-         * X - -
-         */
-        $boardRequest = $this->generateEmptyRequestBoard();
-        // vector: 1
-        $boardRequest['board'][0]['value'] = FieldInterface::PRIMARY_PLAYER_SYMBOL;
-        $boardRequest['board'][1]['value'] = FieldInterface::SECONDARY_PLAYER_SYMBOL;
-        $boardRequest['board'][2]['value'] = '';
-
-        // vector: 2
-        $boardRequest['board'][3]['value'] = '';
-        $boardRequest['board'][4]['value'] = '';
-        $boardRequest['board'][5]['value'] = '';
-
-        // vector: 3
-        $boardRequest['board'][6]['value'] = FieldInterface::PRIMARY_PLAYER_SYMBOL;
-        $boardRequest['board'][7]['value'] = '';
-        $boardRequest['board'][8]['value'] = '';
-
-        $this->requestAndAssertField($boardRequest, 1, 0, FieldInterface::SECONDARY_PLAYER_SYMBOL);
-
-        /**
-         * X 0 -
-         * - - -
-         * - - X
-         */
-        $boardRequest = $this->generateEmptyRequestBoard();
-        // vector: 1
-        $boardRequest['board'][0]['value'] = FieldInterface::PRIMARY_PLAYER_SYMBOL;
-        $boardRequest['board'][1]['value'] = FieldInterface::SECONDARY_PLAYER_SYMBOL;
-        $boardRequest['board'][2]['value'] = '';
-
-        // vector: 2
-        $boardRequest['board'][3]['value'] = '';
-        $boardRequest['board'][4]['value'] = '';
-        $boardRequest['board'][5]['value'] = '';
-
-        // vector: 3
-        $boardRequest['board'][6]['value'] = '';
-        $boardRequest['board'][7]['value'] = '';
-        $boardRequest['board'][8]['value'] = FieldInterface::PRIMARY_PLAYER_SYMBOL;
-
-        $this->requestAndAssertField($boardRequest, 1, 1, FieldInterface::SECONDARY_PLAYER_SYMBOL);
-
-        /**
-         * - 0 X
-         * - X -
-         * - - -
-         */
-        $boardRequest = $this->generateEmptyRequestBoard();
-        // vector: 1
-        $boardRequest['board'][0]['value'] = '';
-        $boardRequest['board'][1]['value'] = FieldInterface::SECONDARY_PLAYER_SYMBOL;
-        $boardRequest['board'][2]['value'] = FieldInterface::PRIMARY_PLAYER_SYMBOL;
-
-        // vector: 2
-        $boardRequest['board'][3]['value'] = '';
-        $boardRequest['board'][4]['value'] = FieldInterface::PRIMARY_PLAYER_SYMBOL;
-        $boardRequest['board'][5]['value'] = '';
-
-        // vector: 3
-        $boardRequest['board'][6]['value'] = '';
-        $boardRequest['board'][7]['value'] = '';
-        $boardRequest['board'][8]['value'] = '';
-
-        $this->requestAndAssertField($boardRequest, 2, 0, FieldInterface::SECONDARY_PLAYER_SYMBOL);
-
+//        /**
+//         * O - X
+//         * - X -
+//         * - - -
+//         */
+//        $boardRequest = $this->generateEmptyRequestBoard();
+//        // vector: 1
+//        $boardRequest['board'][0]['value'] = FieldInterface::SECONDARY_PLAYER_SYMBOL;
+//        $boardRequest['board'][1]['value'] = '';
+//        $boardRequest['board'][2]['value'] = FieldInterface::PRIMARY_PLAYER_SYMBOL;
+//
+//        // vector: 2
+//        $boardRequest['board'][3]['value'] = '';
+//        $boardRequest['board'][4]['value'] = FieldInterface::PRIMARY_PLAYER_SYMBOL;
+//        $boardRequest['board'][5]['value'] = '';
+//
+//        // vector: 3
+//        $boardRequest['board'][6]['value'] = '';
+//        $boardRequest['board'][7]['value'] = '';
+//        $boardRequest['board'][8]['value'] = '';
+//
+//        $this->requestAndAssertField($boardRequest, 2, 0, FieldInterface::SECONDARY_PLAYER_SYMBOL);
+//
+//        /**
+//         * X 0 -
+//         * - - -
+//         * X - -
+//         */
+//        $boardRequest = $this->generateEmptyRequestBoard();
+//        // vector: 1
+//        $boardRequest['board'][0]['value'] = FieldInterface::PRIMARY_PLAYER_SYMBOL;
+//        $boardRequest['board'][1]['value'] = FieldInterface::SECONDARY_PLAYER_SYMBOL;
+//        $boardRequest['board'][2]['value'] = '';
+//
+//        // vector: 2
+//        $boardRequest['board'][3]['value'] = '';
+//        $boardRequest['board'][4]['value'] = '';
+//        $boardRequest['board'][5]['value'] = '';
+//
+//        // vector: 3
+//        $boardRequest['board'][6]['value'] = FieldInterface::PRIMARY_PLAYER_SYMBOL;
+//        $boardRequest['board'][7]['value'] = '';
+//        $boardRequest['board'][8]['value'] = '';
+//
+//        $this->requestAndAssertField($boardRequest, 1, 0, FieldInterface::SECONDARY_PLAYER_SYMBOL);
+//
+//        /**
+//         * X 0 -
+//         * - - -
+//         * - - X
+//         */
+//        $boardRequest = $this->generateEmptyRequestBoard();
+//        // vector: 1
+//        $boardRequest['board'][0]['value'] = FieldInterface::PRIMARY_PLAYER_SYMBOL;
+//        $boardRequest['board'][1]['value'] = FieldInterface::SECONDARY_PLAYER_SYMBOL;
+//        $boardRequest['board'][2]['value'] = '';
+//
+//        // vector: 2
+//        $boardRequest['board'][3]['value'] = '';
+//        $boardRequest['board'][4]['value'] = '';
+//        $boardRequest['board'][5]['value'] = '';
+//
+//        // vector: 3
+//        $boardRequest['board'][6]['value'] = '';
+//        $boardRequest['board'][7]['value'] = '';
+//        $boardRequest['board'][8]['value'] = FieldInterface::PRIMARY_PLAYER_SYMBOL;
+//
+//        $this->requestAndAssertField($boardRequest, 1, 1, FieldInterface::SECONDARY_PLAYER_SYMBOL);
+//
+//        /**
+//         * - 0 X
+//         * - X -
+//         * - - -
+//         */
+//        $boardRequest = $this->generateEmptyRequestBoard();
+//        // vector: 1
+//        $boardRequest['board'][0]['value'] = '';
+//        $boardRequest['board'][1]['value'] = FieldInterface::SECONDARY_PLAYER_SYMBOL;
+//        $boardRequest['board'][2]['value'] = FieldInterface::PRIMARY_PLAYER_SYMBOL;
+//
+//        // vector: 2
+//        $boardRequest['board'][3]['value'] = '';
+//        $boardRequest['board'][4]['value'] = FieldInterface::PRIMARY_PLAYER_SYMBOL;
+//        $boardRequest['board'][5]['value'] = '';
+//
+//        // vector: 3
+//        $boardRequest['board'][6]['value'] = '';
+//        $boardRequest['board'][7]['value'] = '';
+//        $boardRequest['board'][8]['value'] = '';
+//
+//        $this->requestAndAssertField($boardRequest, 2, 0, FieldInterface::SECONDARY_PLAYER_SYMBOL);
+//
 
         /**
          * X 0 X

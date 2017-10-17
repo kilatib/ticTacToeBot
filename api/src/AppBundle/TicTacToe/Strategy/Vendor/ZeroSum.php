@@ -73,6 +73,19 @@ class ZeroSum extends AbstractStrategy implements MoveInterface
                         );
                         $tmpScore = $scorePoint[2];  // 3 parameter
 
+                        /**
+                         * make it more stronger
+                         *    if situation in draw set him to main diagonal
+                         */
+                        if (empty($tmpScore)
+                            && empty($score)
+                            && $x == $y
+                        ) {
+                            $tmpScore =  $coefficient * 1;
+                            $scorePoint[0] = $x;
+                            $scorePoint[1] = $y;
+                        }
+
                         if ($coefficient < 0) {
                             // min strategy
                             if ($tmpScore < $score) {

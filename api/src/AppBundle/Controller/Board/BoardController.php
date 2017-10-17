@@ -24,7 +24,7 @@ use AppBundle\Model\Board\ {
 use AppBundle\Model\Request\Board as RequestBoard;
 
 use AppBundle\TicTacToe\ {
-    Factory\Strategy        as StrategyFactory,
+    Strategy\StrategyFactory,
     Strategy\MoveInterface
 };
 
